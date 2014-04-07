@@ -38,17 +38,22 @@ app.post('/upload', function(req, res) {
 
 		} else {
 
-		   var newPath = __dirname + "/uploads/fullsize/" + imageName;
-
-		  var thumbPath = __dirname + "/uploads/thumbs/" + imageName;
+		  var newPath = __dirname + "/uploads/fullsize/" + imageName;
 
 		  /// write file to uploads/fullsize folder
 		  fs.writeFile(newPath, data, function (err) {
-
-		  	/// write file to uploads/thumbs folder
+		  
+			var randomImage = Math.floor((Math.random()*5000)+4001); 
+		    var thumbPath = __dirname + "/uploads/fullsize/input" + randomImage + ".gif";
+		    /// rename input file
+			fs.rename(newPath, thumbPath, function (err) {
+			  console.log('renamed file');
+			});
+			  
+		  	/// execute transcoding
 			  var exec = require('child_process').exec,
 				child;
-			child = exec('uploads\\fullsize\\ffmpeg -i uploads\\fullsize\\' + imageName + ' -c:v libvpx -crf 12 -b:v 500K uploads\\fullsize\\' + imageName + '.webm',
+			child = exec('uploads\\fullsize\\ffmpeg -i uploads\\fullsize\\input' + randomImage + '.gif -c:v libvpx -crf 12 -b:v 500K uploads\\fullsize\\output' + randomImage + '.webm',
 			  function (error, stdout, stderr) {
 				console.log('stdout: ' + stdout);
 				console.log('stderr: ' + stderr);
@@ -58,7 +63,7 @@ app.post('/upload', function(req, res) {
 			});
 			   webmRedir = function() {
 					// all the stuff you want to happen after that pause
-					res.redirect("/uploads/fullsize/" + imageName + ".webm");
+					res.redirect("/uploads/fullsize/output" + randomImage + ".webm");
 				}
 				setTimeout(webmRedir, 5000);
 		  });
