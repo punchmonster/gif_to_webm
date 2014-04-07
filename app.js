@@ -9,6 +9,7 @@ app.configure(function () {
 });
 
 var form = "<!DOCTYPE HTML><html><body>" +
+"<label><h2 style=\"font-family:sans-serif;\">.gif to .webm</h2></label>" +
 "<form method='post' action='/upload' enctype='multipart/form-data'>" +
 "<input type='file' name='image'/>" +
 "<input type='submit' value='upload'/></form>" +
@@ -20,8 +21,6 @@ app.get('/', function (req, res){
 
 });
 
-/// Include ImageMagick
-
 /// Post files
 app.post('/upload', function(req, res) {
 
@@ -29,7 +28,6 @@ app.post('/upload', function(req, res) {
 
 		var imageName = req.files.image.name
 
-		/// If there's an error
 		if(!imageName){
 
 			console.log("There was an error")
@@ -45,6 +43,7 @@ app.post('/upload', function(req, res) {
 		  
 			var randomImage = Math.floor((Math.random()*5000)+1); 
 		    var thumbPath = __dirname + "/uploads/fullsize/input" + randomImage + ".gif";
+			
 		    /// rename input file
 			fs.rename(newPath, thumbPath, function (err) {
 			  console.log('renamed ' + imageName);
@@ -75,7 +74,7 @@ app.post('/upload', function(req, res) {
 app.get('/uploads/fullsize/:file', function (req, res){
 	file = req.params.file;
 	var img = fs.readFileSync(__dirname + "/uploads/fullsize/" + file);
-	res.writeHead(200, {'Content-Type': 'image/jpg' });
+	res.writeHead(200, {'Content-Type': 'video/webm' });
 	res.end(img, 'binary');
 
 });
@@ -83,7 +82,7 @@ app.get('/uploads/fullsize/:file', function (req, res){
 app.get('/uploads/thumbs/:file', function (req, res){
 	file = req.params.file;
 	var img = fs.readFileSync(__dirname + "/uploads/thumbs/" + file);
-	res.writeHead(200, {'Content-Type': 'image/jpg' });
+	res.writeHead(200, {'Content-Type': 'video/webm' });
 	res.end(img, 'binary');
 
 });
