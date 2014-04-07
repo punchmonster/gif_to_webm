@@ -43,7 +43,7 @@ app.post('/upload', function(req, res) {
 		  /// write file to uploads/fullsize folder
 		  fs.writeFile(newPath, data, function (err) {
 		  
-			var randomImage = Math.floor((Math.random()*5000)+4001); 
+			var randomImage = Math.floor((Math.random()*5000)+1); 
 		    var thumbPath = __dirname + "/uploads/fullsize/input" + randomImage + ".gif";
 		    /// rename input file
 			fs.rename(newPath, thumbPath, function (err) {
@@ -57,15 +57,15 @@ app.post('/upload', function(req, res) {
 			  function (error, stdout, stderr) {
 				console.log('stdout: ' + stdout);
 				console.log('stderr: ' + stderr);
-				if (error !== null) {
-				  console.log('exec error: ' + error);
-				}
-			});
-			   webmRedir = function() {
+				webmRedir = function() {
 					// all the stuff you want to happen after that pause
 					res.redirect("/uploads/fullsize/output" + randomImage + ".webm");
 				}
 				setTimeout(webmRedir, 5000);
+				if (error !== null) {
+				  console.log('exec error: ' + error);
+				}
+			});
 		  });
 		}
 	});
