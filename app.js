@@ -47,11 +47,11 @@ app.post('/upload', function(req, res) {
 		    var thumbPath = __dirname + "/uploads/fullsize/input" + randomImage + ".gif";
 		    /// rename input file
 			fs.rename(newPath, thumbPath, function (err) {
-			  console.log('renamed file');
+			  console.log('renamed ' + imageName);
 			});
 			  
 		  	/// execute transcoding
-			  var exec = require('child_process').exec,
+			var exec = require('child_process').exec,
 				child;
 			child = exec('uploads\\fullsize\\ffmpeg -i uploads\\fullsize\\input' + randomImage + '.gif -c:v libvpx -crf 12 -b:v 500K uploads\\fullsize\\output' + randomImage + '.webm',
 			  function (error, stdout, stderr) {
